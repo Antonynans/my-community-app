@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
-import { authModalState } from '../atoms/authModalAtom';
-import type { Community, CommunitySnippet } from '../atoms/communitiesAtom';
-import { communityState, defaultCommunity } from '../atoms/communitiesAtom';
-import { auth, firestore } from '../firebase/clientApp';
-import { getMySnippets } from '../helpers/firestore';
+import { authModalState } from '@/atoms/AuthModalAtom';
+import type { Community, CommunitySnippet } from '@/atoms/communitiesAtom';
+import { communityState, defaultCommunity } from '@/atoms/communitiesAtom';
+import { auth, firestore } from '@/Firebase/clientApp';
+import { getMySnippets } from '@/helpers/firestore';
 
 // Add ssrCommunityData near end as small optimization
 const useCommunityData = (ssrCommunityData?: boolean) => {
@@ -19,12 +19,6 @@ const useCommunityData = (ssrCommunityData?: boolean) => {
   const setAuthModalState = useSetRecoilState(authModalState);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
-  useEffect(() => {
-    if (!user || !!communityStateValue.mySnippets.length) return;
-
-    getSnippets();
-  }, [user]);
 
   const getSnippets = async () => {
     setLoading(true);
@@ -42,6 +36,12 @@ const useCommunityData = (ssrCommunityData?: boolean) => {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    if (!user || !!communityStateValue.mySnippets.length) return;
+
+    getSnippets();
+  }, [user]);
 
   const getCommunityData = async (communityId: string) => {
     // this causes weird memory leak error - not sure why
@@ -78,7 +78,6 @@ const useCommunityData = (ssrCommunityData?: boolean) => {
     setLoading(false);
   };
 
-  
   const joinCommunity = async (community: Community) => {
     console.log('JOINING COMMUNITY: ', community.id);
     try {

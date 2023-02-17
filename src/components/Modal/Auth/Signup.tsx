@@ -1,101 +1,98 @@
-import type { User } from 'firebase/auth';
-import { addDoc, collection } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
+import { Button, Flex, Text } from '@chakra-ui/react';
+import React, { useState } from 'react';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
-import { useSetRecoilState } from 'recoil';
 
-import { authModalState } from '@/atoms/AuthModalAtom';
-import { auth, firestore } from '@/Firebase/clientApp';
+import type { ModalView } from '@/atoms/AuthModalAtom';
+import InputItem from '@/components/Layout/InputItem';
+import { auth } from '@/Firebase/clientApp';
 import { FIREBASE_ERRORS } from '@/Firebase/errors';
 
-const Signup = () => {
-  const [signupForm, setSignupForm] = useState({
+type SignUpProps = {
+  toggleView: (view: ModalView) => void;
+};
+
+const SignUp: React.FC<SignUpProps> = ({ toggleView }) => {
+  const [form, setForm] = useState({
     email: '',
     password: '',
     confirmPassword: '',
   });
-  const [error, setError] = useState('');
-
-  const setAuthModalState = useSetRecoilState(authModalState);
-
-  const [createUserWithEmailAndPassword, userCred, loading, userError] =
+  const [formError, setFormError] = useState('');
+  const [createUserWithEmailAndPassword, _, loading, authError] =
     useCreateUserWithEmailAndPassword(auth);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (error) setError('');
-    if (signupForm.password !== signupForm.confirmPassword) {
-      setError('Password do not match');
-      return;
+    if (formError) setFormError('');
+    if (!form.email.includes('@')) {
+      return setFormError('Please enter a valid email');
     }
-    createUserWithEmailAndPassword(signupForm.email, signupForm.password);
-  };
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSignupForm({ ...signupForm, [event.target.name]: event.target.value });
+
+    if (form.password !== form.confirmPassword) {
+      return setFormError('Passwords do not match');
+    }
+
+    // Valid form inputs
+    createUserWithEmailAndPassword(form.email, form.password);
   };
 
-  const createUserDocument = async (user: User) => {
-    await addDoc(
-      collection(firestore, 'users'),
-      JSON.parse(JSON.stringify(user))
-    );
+  const onChange = ({
+    target: { name, value },
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
-
-  useEffect(() => {
-    if (userCred) {
-      createUserDocument(userCred.user);
-    }
-  }, [userCred]);
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col">
-      <input
+    <form onSubmit={onSubmit}>
+      <InputItem
         name="email"
         placeholder="email"
-        type="email"
-        className="mb-2"
+        type="text"
+        mb={2}
         onChange={onChange}
-        required
       />
-      <input
+      <InputItem
         name="password"
         placeholder="password"
         type="password"
-        className="mb-2"
+        mb={2}
         onChange={onChange}
-        required
       />
-      <input
+      <InputItem
         name="confirmPassword"
         placeholder="confirm password"
         type="password"
-        className="mb-2"
         onChange={onChange}
-        required
       />
-      <p>
-        {error ||
-          FIREBASE_ERRORS[userError?.message as keyof typeof FIREBASE_ERRORS]}
-      </p>
-      <button type="submit" className="rounded-full bg-blue-500 text-white">
-        {!loading ? 'Sign Up' : loading}
-      </button>
-      <div className="">
-        <p>Already a redditor</p>
-        <p
-          className=""
-          onClick={() =>
-            setAuthModalState((prev) => ({
-              ...prev,
-              view: 'login',
-            }))
-          }
+      <Text textAlign="center" mt={2} fontSize="10pt" color="red">
+        {formError ||
+          FIREBASE_ERRORS[authError?.message as keyof typeof FIREBASE_ERRORS]}
+      </Text>
+      <Button
+        width="100%"
+        height="36px"
+        mb={2}
+        mt={2}
+        type="submit"
+        isLoading={loading}
+      >
+        Sign Up
+      </Button>
+      <Flex fontSize="9pt" justifyContent="center">
+        <Text mr={1}>Have an account?</Text>
+        <Text
+          color="blue.500"
+          fontWeight={700}
+          cursor="pointer"
+          onClick={() => toggleView('login')}
         >
           LOG IN
-        </p>
-      </div>
+        </Text>
+      </Flex>
     </form>
   );
 };
-
-export default Signup;
+export default SignUp;

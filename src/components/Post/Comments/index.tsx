@@ -1,4 +1,3 @@
-import React, { useCallback, useEffect, useState } from "react";
 import {
   Box,
   Flex,
@@ -6,8 +5,8 @@ import {
   SkeletonText,
   Stack,
   Text,
-} from "@chakra-ui/react";
-import { User } from "firebase/auth";
+} from '@chakra-ui/react';
+import type { User } from 'firebase/auth';
 import {
   collection,
   doc,
@@ -18,13 +17,18 @@ import {
   serverTimestamp,
   where,
   writeBatch,
-} from "firebase/firestore";
-import { useSetRecoilState } from "recoil";
-import { authModalState } from "../../../atoms/authModalAtom";
-import { Post, postState } from "../../../atoms/postsAtom";
-import { firestore } from "../../../firebase/clientApp";
-import CommentItem, { Comment } from "./CommentItem";
-import CommentInput from "./Input";
+} from 'firebase/firestore';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useSetRecoilState } from 'recoil';
+
+import { authModalState } from '@/atoms/AuthModalAtom';
+import type { Post } from '@/atoms/postsAtom';
+import { postState } from '@/atoms/postsAtom';
+import { firestore } from '@/Firebase/clientApp';
+
+import type { Comment } from './CommentItem';
+import CommentItem from './CommentItem';
+import CommentInput from './Input';
 
 type CommentsProps = {
   user?: User | null;
@@ -37,17 +41,17 @@ const Comments: React.FC<CommentsProps> = ({
   selectedPost,
   community,
 }) => {
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState('');
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentFetchLoading, setCommentFetchLoading] = useState(false);
   const [commentCreateLoading, setCommentCreateLoading] = useState(false);
-  const [deleteLoading, setDeleteLoading] = useState("");
+  const [deleteLoading, setDeleteLoading] = useState('');
   const setAuthModalState = useSetRecoilState(authModalState);
   const setPostState = useSetRecoilState(postState);
 
-  const onCreateComment = async (comment: string) => {
+  const onCreateComment = async () => {
     if (!user) {
-      setAuthModalState({ open: true, view: "login" });
+      setAuthModalState({ open: true, view: 'login' });
       return;
     }
 
@@ -56,11 +60,11 @@ const Comments: React.FC<CommentsProps> = ({
       const batch = writeBatch(firestore);
 
       // Create comment document
-      const commentDocRef = doc(collection(firestore, "comments"));
+      const commentDocRef = doc(collection(firestore, 'comments'));
       batch.set(commentDocRef, {
         postId: selectedPost.id,
         creatorId: user.uid,
-        creatorDisplayText: user.email!.split("@")[0],
+        creatorDisplayText: user.email!.split('@')[0],
         creatorPhotoURL: user.photoURL,
         communityId: community,
         text: comment,
@@ -69,18 +73,18 @@ const Comments: React.FC<CommentsProps> = ({
       } as Comment);
 
       // Update post numberOfComments
-      batch.update(doc(firestore, "posts", selectedPost.id), {
+      batch.update(doc(firestore, 'posts', selectedPost.id), {
         numberOfComments: increment(1),
       });
       await batch.commit();
 
-      setComment("");
+      setComment('');
       const { id: postId, title } = selectedPost;
       setComments((prev) => [
         {
           id: commentDocRef.id,
           creatorId: user.uid,
-          creatorDisplayText: user.email!.split("@")[0],
+          creatorDisplayText: user.email!.split('@')[0],
           creatorPhotoURL: user.photoURL,
           communityId: community,
           postId,
@@ -103,7 +107,7 @@ const Comments: React.FC<CommentsProps> = ({
         postUpdateRequired: true,
       }));
     } catch (error: any) {
-      console.log("onCreateComment error", error.message);
+      console.log('onCreateComment error', error.message);
     }
     setCommentCreateLoading(false);
   };
@@ -112,12 +116,12 @@ const Comments: React.FC<CommentsProps> = ({
     async (comment: Comment) => {
       setDeleteLoading(comment.id as string);
       try {
-        if (!comment.id) throw "Comment has no ID";
+        if (!comment.id) throw 'Comment has no ID';
         const batch = writeBatch(firestore);
-        const commentDocRef = doc(firestore, "comments", comment.id);
+        const commentDocRef = doc(firestore, 'comments', comment.id);
         batch.delete(commentDocRef);
 
-        batch.update(doc(firestore, "posts", comment.postId), {
+        batch.update(doc(firestore, 'posts', comment.postId), {
           numberOfComments: increment(-1),
         });
 
@@ -135,10 +139,10 @@ const Comments: React.FC<CommentsProps> = ({
         setComments((prev) => prev.filter((item) => item.id !== comment.id));
         // return true;
       } catch (error: any) {
-        console.log("Error deletig comment", error.message);
+        console.log('Error deleting comment', error.message);
         // return false;
       }
-      setDeleteLoading("");
+      setDeleteLoading('');
     },
     [setComments, setPostState]
   );
@@ -146,9 +150,9 @@ const Comments: React.FC<CommentsProps> = ({
   const getPostComments = async () => {
     try {
       const commentsQuery = query(
-        collection(firestore, "comments"),
-        where("postId", "==", selectedPost.id),
-        orderBy("createdAt", "desc")
+        collection(firestore, 'comments'),
+        where('postId', '==', selectedPost.id),
+        orderBy('createdAt', 'desc')
       );
       const commentDocs = await getDocs(commentsQuery);
       const comments = commentDocs.docs.map((doc) => ({
@@ -157,13 +161,13 @@ const Comments: React.FC<CommentsProps> = ({
       }));
       setComments(comments as Comment[]);
     } catch (error: any) {
-      console.log("getPostComments error", error.message);
+      console.log('getPostComments error', error.message);
     }
     setCommentFetchLoading(false);
   };
 
   useEffect(() => {
-    console.log("HERE IS SELECTED POST", selectedPost.id);
+    console.log('HERE IS SELECTED POST', selectedPost.id);
 
     getPostComments();
   }, []);
@@ -198,7 +202,7 @@ const Comments: React.FC<CommentsProps> = ({
           </>
         ) : (
           <>
-            {!!comments.length ? (
+            {comments.length ? (
               <>
                 {comments.map((item: Comment) => (
                   <CommentItem

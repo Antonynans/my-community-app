@@ -1,88 +1,100 @@
+import { Button, Flex, Text } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
-import { useSetRecoilState } from 'recoil';
 
 import type { ModalView } from '@/atoms/AuthModalAtom';
-import { authModalState } from '@/atoms/AuthModalAtom';
+import InputItem from '@/components/Layout/InputItem';
 import { auth } from '@/Firebase/clientApp';
 import { FIREBASE_ERRORS } from '@/Firebase/errors';
 
 type LoginProps = {
-  // toggleView: (view: ModalView) => void;
+  toggleView: (view: ModalView) => void;
 };
 
-const Login: React.FC<LoginProps> = () => {
-  const [loginForm, setLoginForm] = useState({
+const Login: React.FC<LoginProps> = ({ toggleView }) => {
+  const [form, setForm] = useState({
     email: '',
     password: '',
   });
-  const setAuthModalState = useSetRecoilState(authModalState);
-  const [signInWithEmailAndPassword, user, loading, error] =
+  const [formError, setFormError] = useState('');
+
+  const [signInWithEmailAndPassword, _, loading, authError] =
     useSignInWithEmailAndPassword(auth);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (formError) setFormError('');
+    if (!form.email.includes('@')) {
+      return setFormError('Please enter a valid email');
+    }
 
-    signInWithEmailAndPassword(loginForm.email, loginForm.password);
+    // Valid form inputs
+    signInWithEmailAndPassword(form.email, form.password);
   };
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLoginForm({ ...loginForm, [event.target.name]: event.target.value });
+
+  const onChange = ({
+    target: { name, value },
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col">
-      <input
+    <form onSubmit={onSubmit}>
+      <InputItem
         name="email"
         placeholder="email"
-        type="email"
-        className="mb-2"
+        type="text"
+        mb={2}
         onChange={onChange}
-        required
       />
-      <input
+      <InputItem
         name="password"
         placeholder="password"
         type="password"
-        className="mb-2"
         onChange={onChange}
-        required
       />
-      <p className="">
-        {FIREBASE_ERRORS[error?.message as keyof typeof FIREBASE_ERRORS]}
-      </p>
-      <button type="submit" className="rounded-full bg-blue-500 text-white">
+      <Text textAlign="center" mt={2} fontSize="10pt" color="red">
+        {formError ||
+          FIREBASE_ERRORS[authError?.message as keyof typeof FIREBASE_ERRORS]}
+      </Text>
+      <Button
+        width="100%"
+        height="36px"
+        mb={2}
+        mt={2}
+        type="submit"
+        isLoading={loading}
+      >
         Log In
-      </button>
-      <div className="mb-2 flex justify-center">
-        <p className="mr-1">Forgot your password?</p>
-        <p
-          className="cursor-pointer"
-          onClick={() =>
-            setAuthModalState((prev) => ({
-              ...prev,
-              view: 'resetPassword',
-            }))
-          }
+      </Button>
+      <Flex justifyContent="center" mb={2}>
+        <Text fontSize="9pt" mr={1}>
+          Forgot your password?
+        </Text>
+        <Text
+          fontSize="9pt"
+          color="blue.500"
+          cursor="pointer"
+          onClick={() => toggleView('resetPassword')}
         >
           Reset
-        </p>
-      </div>
-      <div className="">
-        <p>New here</p>
-        <p
-          className=""
-          onClick={() =>
-            setAuthModalState((prev) => ({
-              ...prev,
-              view: 'signup',
-            }))
-          }
+        </Text>
+      </Flex>
+      <Flex fontSize="9pt" justifyContent="center">
+        <Text mr={1}>New here?</Text>
+        <Text
+          color="blue.500"
+          fontWeight={700}
+          cursor="pointer"
+          onClick={() => toggleView('signup')}
         >
           SIGN UP
-        </p>
-      </div>
+        </Text>
+      </Flex>
     </form>
   );
 };
-
 export default Login;

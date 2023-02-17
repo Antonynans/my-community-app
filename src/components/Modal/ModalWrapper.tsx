@@ -1,15 +1,5 @@
-import {
-  Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  useDisclosure,
-} from "@chakra-ui/react";
-import React from "react";
+import { Modal, ModalContent, ModalOverlay } from '@chakra-ui/react';
+import React from 'react';
 
 type ModalWrapperProps = {
   isOpen: boolean;
@@ -25,7 +15,7 @@ const ModalWrapper: React.FC<ModalWrapperProps> = ({
     <>
       <Modal isOpen={isOpen} onClose={onClose} size="lg">
         <ModalOverlay />
-        <ModalContent width={{ base: "sm", md: "xl" }}>{children}</ModalContent>
+        <ModalContent width={{ base: 'sm', md: 'xl' }}>{children}</ModalContent>
       </Modal>
     </>
   );

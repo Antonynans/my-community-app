@@ -27,13 +27,12 @@ import { auth } from '@/Firebase/clientApp';
 
 type UserMenuProps = {
   user?: User | null;
-  // setModalState: (value: AuthModalState) => void;
 };
 
 const UserMenu: React.FC<UserMenuProps> = ({ user }) => {
-  const setAuthModalState = useSetRecoilState(authModalState);
-
   const resetCommunityState = useResetRecoilState(communityState);
+
+  const setAuthModalState = useSetRecoilState(authModalState);
 
   const logout = async () => {
     await signOut(auth);
@@ -84,9 +83,13 @@ const UserMenu: React.FC<UserMenuProps> = ({ user }) => {
       <MenuList>
         {user ? (
           <>
-            <MenuItem>
-              <Flex align="center">
-                <Icon as={CgProfile} />
+            <MenuItem
+              fontSize="10pt"
+              fontWeight={700}
+              _hover={{ bg: 'blue.500', color: 'white' }}
+            >
+              <Flex alignItems="center">
+                <Icon fontSize={20} mr={2} as={CgProfile} />
                 Profile
               </Flex>
             </MenuItem>
@@ -95,31 +98,24 @@ const UserMenu: React.FC<UserMenuProps> = ({ user }) => {
               fontSize="10pt"
               fontWeight={700}
               _hover={{ bg: 'blue.500', color: 'white' }}
-              onclick={logout}
+              onClick={logout}
             >
-              <Flex align="center">
-                <Icon as={MdOutlineLogin} />
+              <Flex alignItems="center">
+                <Icon fontSize={20} mr={2} as={MdOutlineLogin} />
                 Log Out
               </Flex>
             </MenuItem>
           </>
         ) : (
           <>
-            <MenuItem>
-              <Flex align="center">
-                <Icon as={CgProfile} />
-                Profile
-              </Flex>
-            </MenuItem>
-            <MenuDivider />
             <MenuItem
               fontSize="10pt"
               fontWeight={700}
               _hover={{ bg: 'blue.500', color: 'white' }}
               onClick={() => setAuthModalState({ open: true, view: 'login' })}
             >
-              <Flex align="center">
-                <Icon as={MdOutlineLogin} />
+              <Flex alignItems="center">
+                <Icon fontSize={20} mr={2} as={MdOutlineLogin} />
                 Log In / Sign Up
               </Flex>
             </MenuItem>

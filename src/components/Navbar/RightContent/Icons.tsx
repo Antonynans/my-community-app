@@ -1,5 +1,6 @@
+import { Box, Flex, Icon } from '@chakra-ui/react';
 import React from 'react';
-import { BsArrowRightCircle, BsChatDots } from 'react-icons/bs';
+import { BsArrowUpRightCircle, BsChatDots } from 'react-icons/bs';
 import { GrAdd } from 'react-icons/gr';
 import {
   IoFilterCircleOutline,
@@ -7,33 +8,86 @@ import {
   IoVideocamOutline,
 } from 'react-icons/io5';
 
-const Icons = () => {
+import useDirectory from '@/hooks/useDirectory';
+
+type ActionIconsProps = {};
+
+const ActionIcons: React.FC<ActionIconsProps> = () => {
+  const { toggleMenuOpen } = useDirectory();
   return (
-    <div className="flex items-center">
-      <div className=" hidden items-center border-r border-solid border-[#E2E8F0] md:flex ">
-        <div className="mx-1 cursor-pointer p-1">
-          <BsArrowRightCircle className="text-xl" />
-        </div>
-        <div className="mx-1 cursor-pointer p-1">
-          <IoFilterCircleOutline className="text-[22px]" />
-        </div>
-        <div className="mx-1 cursor-pointer p-1">
-          <IoVideocamOutline className="text-[22px]" />
-        </div>
-      </div>
+    <Flex alignItems="center" flexGrow={1}>
+      <Box
+        display={{ base: 'none', md: 'flex' }}
+        alignItems="center"
+        borderRight="1px solid"
+        borderColor="gray.200"
+      >
+        <Flex
+          mr={1.5}
+          ml={1.5}
+          padding={1}
+          cursor="pointer"
+          borderRadius={4}
+          _hover={{ bg: 'gray.200' }}
+        >
+          <Icon as={BsArrowUpRightCircle} fontSize={20} />
+        </Flex>
+        <Flex
+          mr={1.5}
+          ml={1.5}
+          padding={1}
+          cursor="pointer"
+          borderRadius={4}
+          _hover={{ bg: 'gray.200' }}
+        >
+          <Icon as={IoFilterCircleOutline} fontSize={22} />
+        </Flex>
+        <Flex
+          mr={1.5}
+          ml={1.5}
+          padding={1}
+          cursor="pointer"
+          borderRadius={4}
+          _hover={{ bg: 'gray.200' }}
+        >
+          <Icon as={IoVideocamOutline} fontSize={22} />
+        </Flex>
+      </Box>
       <>
-        <div className="mx-1 cursor-pointer p-1">
-          <BsChatDots className="text-xl" />
-        </div>
-        <div className="mx-1 cursor-pointer p-1">
-          <IoNotificationsOutline className="text-xl" />
-        </div>
-        <div className="mx-1 cursor-pointer p-1">
-          <GrAdd className="text-xl" />
-        </div>
+        <Flex
+          mr={1.5}
+          ml={1.5}
+          padding={1}
+          cursor="pointer"
+          borderRadius={4}
+          _hover={{ bg: 'gray.200' }}
+        >
+          <Icon as={BsChatDots} fontSize={20} />
+        </Flex>
+        <Flex
+          mr={1.5}
+          ml={1.5}
+          padding={1}
+          cursor="pointer"
+          borderRadius={4}
+          _hover={{ bg: 'gray.200' }}
+        >
+          <Icon as={IoNotificationsOutline} fontSize={20} />
+        </Flex>
+        <Flex
+          display={{ base: 'none', md: 'flex' }}
+          mr={3}
+          ml={1.5}
+          padding={1}
+          cursor="pointer"
+          borderRadius={4}
+          _hover={{ bg: 'gray.200' }}
+          onClick={toggleMenuOpen}
+        >
+          <Icon as={GrAdd} fontSize={20} />
+        </Flex>
       </>
-    </div>
+    </Flex>
   );
 };
-
-export default Icons;
+export default ActionIcons;

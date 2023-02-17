@@ -1,12 +1,11 @@
-import { Flex, Icon, Input } from "@chakra-ui/react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import React from "react";
-import { BsLink45Deg } from "react-icons/bs";
-import { FaReddit } from "react-icons/fa";
-import { IoImageOutline } from "react-icons/io5";
-import useDirectory from "../../hooks/useDirectory";
+import { Flex, Icon, Input } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { BsLink45Deg } from 'react-icons/bs';
+import { FaReddit } from 'react-icons/fa';
+import { IoImageOutline } from 'react-icons/io5';
 
+import useDirectory from '@/hooks/useDirectory';
 
 const CreatePostLink: React.FC = () => {
   const router = useRouter();
@@ -37,17 +36,17 @@ const CreatePostLink: React.FC = () => {
       <Input
         placeholder="Create Post"
         fontSize="10pt"
-        _placeholder={{ color: "gray.500" }}
+        _placeholder={{ color: 'gray.500' }}
         _hover={{
-          bg: "white",
-          border: "1px solid",
-          borderColor: "blue.500",
+          bg: 'white',
+          border: '1px solid',
+          borderColor: 'blue.500',
         }}
         _focus={{
-          outline: "none",
-          bg: "white",
-          border: "1px solid",
-          borderColor: "blue.500",
+          outline: 'none',
+          bg: 'white',
+          border: '1px solid',
+          borderColor: 'blue.500',
         }}
         bg="gray.50"
         borderColor="gray.200"

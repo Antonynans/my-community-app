@@ -1,71 +1,96 @@
+import {
+  Flex,
+  ModalBody,
+  ModalCloseButton,
+  ModalHeader,
+} from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import Modal from 'react-modal';
 import { useRecoilState } from 'recoil';
 
 import { authModalState } from '@/atoms/AuthModalAtom';
 import { auth } from '@/Firebase/clientApp';
 
+import ModalWrapper from '../ModalWrapper';
 import AuthInputs from './AuthInputs';
 import OAuthButtons from './OAuthButtons';
 import ResetPassword from './ResetPassword';
 
-const AuthModal: React.FC = () => {
-  const [modalState, setModalState] = useRecoilState(authModalState);
-  const [user, loading, error] = useAuthState(auth);
+type AuthModalProps = {};
 
+const AuthModal: React.FC<AuthModalProps> = () => {
+  const [modalState, setModalState] = useRecoilState(authModalState);
   const handleClose = () =>
     setModalState((prev) => ({
       ...prev,
       open: false,
     }));
 
+  const [user, error] = useAuthState(auth);
+
+  const toggleView = (view: string) => {
+    setModalState({
+      ...modalState,
+      view: view as typeof modalState.view,
+    });
+  };
+
   useEffect(() => {
     if (user) handleClose();
   }, [user]);
 
   return (
-    <>
-      <Modal
-        style={{
-          overlay: {
-            position: 'fixed',
-            top: '0%',
-            left: '0%',
-            right: '0%',
-            bottom: '0%',
-            backgroundColor: 'rgba(119, 119, 119, 0.589)',
-            zIndex: 50,
-          },
-        }}
-        className="absolute inset-x-0 z-50 mt-16 flex h-screen flex-col justify-between overflow-auto border-0 bg-[#FFFDFD] pb-40 shadow-[5px_5px_30px_0px_#00000040] outline-none lg:inset-x-[35%] lg:mt-[20vh] lg:h-auto lg:rounded-[10px] lg:pb-[2%]"
-        isOpen={modalState.open}
-        shouldCloseOnOverlayclick={true}
-        onRequestClose={handleClose}
-        ariaHideApp={false}
+    <ModalWrapper isOpen={modalState.open} onClose={handleClose}>
+      <ModalHeader display="flex" flexDirection="column" alignItems="center">
+        {modalState.view === 'login' && 'Login'}
+        {modalState.view === 'signup' && 'Sign Up'}
+        {modalState.view === 'resetPassword' && 'Reset Password'}
+      </ModalHeader>
+      <ModalCloseButton />
+      <ModalBody
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        pb={6}
       >
-        <>
-          <div>
-            <h2>
-              {modalState.view === 'login' && 'Login'}{' '}
-              {modalState.view === 'signup' && 'Signup'}
-              {modalState.view === 'resetPassword' && 'Reset Password'}
-            </h2>
-          </div>
-
+        <Flex
+          direction="column"
+          alignItems="center"
+          justifyContent="center"
+          width="70%"
+        >
           {modalState.view === 'login' || modalState.view === 'signup' ? (
             <>
               <OAuthButtons />
-              <p className="text-center">OR</p>
-              <AuthInputs />
+              OR
+              <AuthInputs toggleView={toggleView} />
             </>
           ) : (
-            <ResetPassword />
+            <ResetPassword toggleView={toggleView} />
           )}
-        </>
-      </Modal>
-    </>
+          {/* // Will implement at end of tutorial */}
+          {/* {user && !currentUser && (
+                <>
+                  <Spinner size="lg" mt={2} mb={2} />
+                  <Text fontSize="8pt" textAlign="center" color="blue.500">
+                    You are logged in. You will be redirected soon
+                  </Text>
+                </>
+              )} */}
+          {/* {false ? (
+                <Flex
+                  direction="column"
+                  justifyContent="center"
+                  alignItems="center"
+                  height="100%"
+                >
+                </Flex>
+              ) : (
+              )} */}
+        </Flex>
+      </ModalBody>
+    </ModalWrapper>
   );
 };
-
 export default AuthModal;

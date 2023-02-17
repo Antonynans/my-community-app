@@ -1,7 +1,8 @@
-import React, { MouseEventHandler, useState } from "react";
-import { Flex, Textarea, Button, Text } from "@chakra-ui/react";
-import { User } from "firebase/auth";
-import AuthButtons from "../../Navbar/RightContent/AuthButtons";
+import { Button, Flex, Text, Textarea } from '@chakra-ui/react';
+import type { User } from 'firebase/auth';
+import React from 'react';
+
+import AuthButtons from '@/components/Navbar/RightContent/AuthButtons';
 
 type CommentInputProps = {
   comment: string;
@@ -23,9 +24,9 @@ const CommentInput: React.FC<CommentInputProps> = ({
       {user ? (
         <>
           <Text mb={1}>
-            Comment as{" "}
-            <span style={{ color: "#3182CE" }}>
-              {user?.email?.split("@")[0]}
+            Comment as{' '}
+            <span style={{ color: '#3182CE' }}>
+              {user?.email?.split('@')[0]}
             </span>
           </Text>
           <Textarea
@@ -36,11 +37,11 @@ const CommentInput: React.FC<CommentInputProps> = ({
             borderRadius={4}
             minHeight="160px"
             pb={10}
-            _placeholder={{ color: "gray.500" }}
+            _placeholder={{ color: 'gray.500' }}
             _focus={{
-              outline: "none",
-              bg: "white",
-              border: "1px solid black",
+              outline: 'none',
+              bg: 'white',
+              border: '1px solid black',
             }}
           />
           <Flex
