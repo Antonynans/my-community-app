@@ -1,18 +1,20 @@
 import { doc, getDoc } from 'firebase/firestore';
 import type { GetServerSidePropsContext, NextPage } from 'next';
 import React, { useEffect } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { useSetRecoilState } from 'recoil';
 import safeJsonStringify from 'safe-json-stringify';
 
+import About from '@/components/Community/About';
 import CreatePostLink from '@/components/Community/CreatePostLink';
 import Header from '@/components/Community/Header';
 import PageContentLayout from '@/components/Layout/PageContent';
 import Posts from '@/components/Post/Posts';
 // import safeJsonStringify from "safe-json-stringify";
-import { firestore } from '@/Firebase/clientApp';
+import { auth, firestore } from '@/Firebase/clientApp';
 
-import { communityState } from '../../../atoms/communitiesAtom';
 import type { Community } from './communitiesAtom';
+import { communityState } from './communitiesAtom';
 
 interface CommunityPageProps {
   communityData: Community;
@@ -20,6 +22,7 @@ interface CommunityPageProps {
 
 const CommunityPage: NextPage<CommunityPageProps> = ({ communityData }) => {
   const setCommunityStateValue = useSetRecoilState(communityState);
+  const [user, loadingUser] = useAuthState(auth);
 
   if (!communityData) {
     return (
