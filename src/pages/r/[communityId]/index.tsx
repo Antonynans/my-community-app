@@ -1,71 +1,90 @@
 import { doc, getDoc } from 'firebase/firestore';
 import type { GetServerSidePropsContext, NextPage } from 'next';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import safeJsonStringify from 'safe-json-stringify';
 
+import type { Community } from '@/atoms/communitiesAtom';
+import { communityState } from '@/atoms/communitiesAtom';
 import About from '@/components/Community/About';
 import CreatePostLink from '@/components/Community/CreatePostLink';
 import Header from '@/components/Community/Header';
+import CommunityNotFound from '@/components/Community/NotFound';
 import PageContentLayout from '@/components/Layout/PageContent';
 import Posts from '@/components/Post/Posts';
-// import safeJsonStringify from "safe-json-stringify";
 import { auth, firestore } from '@/Firebase/clientApp';
-
-import type { Community } from './communitiesAtom';
-import { communityState } from './communitiesAtom';
 
 interface CommunityPageProps {
   communityData: Community;
 }
 
 const CommunityPage: NextPage<CommunityPageProps> = ({ communityData }) => {
-  const setCommunityStateValue = useSetRecoilState(communityState);
   const [user, loadingUser] = useAuthState(auth);
 
-  if (!communityData) {
-    return (
-      <>
-        <Header communityData={communityData} />
-        <PageContentLayout>
-          <>
-            <CreatePostLink />
-            <Posts
-              communityData={communityData}
-              userId={user?.uid}
-              loadingUser={loadingUser}
-            />
-          </>
-          {/* Right Content */}
-          <>
-            <About communityData={communityData} />
-          </>
-        </PageContentLayout>
-      </>
-    );
-  }
+  const [communityStateValue, setCommunityStateValue] =
+    useRecoilState(communityState);
+
+  // useEffect(() => {
+  //   // First time the user has navigated to this community page during session - add to cache
+  //   const firstSessionVisit =
+  //     !communityStateValue.visitedCommunities[communityData.id!];
+
+  //   if (firstSessionVisit) {
+  //     setCommunityStateValue((prev) => ({
+  //       ...prev,
+  //       visitedCommunities: {
+  //         ...prev.visitedCommunities,
+  //         [communityData.id!]: communityData,
+  //       },
+  //     }));
+  //   }
+  // }, [communityData]);
 
   useEffect(() => {
     setCommunityStateValue((prev) => ({
       ...prev,
       currentCommunity: communityData,
     }));
-  }, []);
+  }, [communityData]);
 
-  return <div>welcome to {communityData.id}</div>;
+  // Community was not found in the database
+  if (!communityData) {
+    return <CommunityNotFound />;
+  }
+
+  return (
+    <>
+      <Header communityData={communityData} />
+      <PageContentLayout>
+        {/* Left Content */}
+        <>
+          <CreatePostLink />
+          <Posts
+            communityData={communityData}
+            userId={user?.uid}
+            loadingUser={loadingUser}
+          />
+        </>
+        {/* Right Content */}
+        <>
+          <About communityData={communityData} />
+        </>
+      </PageContentLayout>
+    </>
+  );
 };
 
 export default CommunityPage;
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  console.log('GET SERVER SIDE PROPS RUNNING');
+  console.log("GET SERVER SIDE PROPS RUNNING");
 
   try {
     const communityDocRef = doc(
       firestore,
       'communities',
-      context.query.communityId as string
+      context.query.community as string
     );
     const communityDoc = await getDoc(communityDocRef);
     return {
@@ -74,11 +93,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
           ? JSON.parse(
               safeJsonStringify({ id: communityDoc.id, ...communityDoc.data() }) // needed for dates
             )
-          : '',
+          : "",
       },
     };
   } catch (error) {
     // Could create error page here
-    console.log('getServerSideProps error - [community]', error);
+    console.log("getServerSideProps error - [community]", error);
   }
 }

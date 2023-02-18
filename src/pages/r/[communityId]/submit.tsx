@@ -5,12 +5,12 @@ import { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRecoilValue } from 'recoil';
 
+import { communityState } from '@/atoms/communitiesAtom';
+import About from '@/components/Community/About';
 import PageContentLayout from '@/components/Layout/PageContent';
 import NewPostForm from '@/components/Post/PostForm/NewPostForm';
 import { auth } from '@/Firebase/clientApp';
 import useCommunityData from '@/hooks/useCommunityData';
-
-import { communityState } from './communitiesAtom';
 
 const CreateCommmunityPostPage: NextPage = () => {
   const [user, loadingUser, error] = useAuthState(auth);

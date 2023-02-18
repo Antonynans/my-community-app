@@ -14,6 +14,7 @@ import { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRecoilValue } from 'recoil';
 
+import { communityState } from '@/atoms/communitiesAtom';
 import type { Post, PostVote } from '@/atoms/postsAtom';
 import CreatePostLink from '@/components/Community/CreatePostLink';
 import PersonalHome from '@/components/Community/PersonalHome';
@@ -24,8 +25,6 @@ import PostLoader from '@/components/Post/Loader';
 import PostItem from '@/components/Post/PostItem';
 import { auth, firestore } from '@/Firebase/clientApp';
 import usePosts from '@/hooks/usePosts';
-
-import { communityState } from './r/[communityId]/communitiesAtom';
 
 const Home: NextPage = () => {
   const [user, loadingUser] = useAuthState(auth);
