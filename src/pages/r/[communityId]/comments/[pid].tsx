@@ -54,7 +54,7 @@ const PostPage: React.FC<PostPageProps> = () => {
 
   // Fetch post if not in already in state
   useEffect(() => {
-    const { pid } = router.query;
+    // const { pid } = router.query;
 
     if (pid && !postStateValue.selectedPost) {
       fetchPost();

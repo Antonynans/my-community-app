@@ -77,9 +77,9 @@ const CommunityPage: NextPage<CommunityPageProps> = ({ communityData }) => {
 
 export default CommunityPage;
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  console.log("GET SERVER SIDE PROPS RUNNING");
-
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
   try {
     const communityDocRef = doc(
       firestore,
@@ -93,11 +93,17 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
           ? JSON.parse(
               safeJsonStringify({ id: communityDoc.id, ...communityDoc.data() }) // needed for dates
             )
-          : "",
+          : '',
       },
     };
   } catch (error) {
     // Could create error page here
-    console.log("getServerSideProps error - [community]", error);
+    console.log('getServerSideProps error - [community]', error);
+    // return {
+    //   redirect: {
+    //     destination: '/',
+    //     permanent: false,
+    //   },
+    // };
   }
-}
+};
