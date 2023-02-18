@@ -32,7 +32,6 @@ const usePosts = (communityData?: Community) => {
   const communityStateValue = useRecoilValue(communityState);
 
   const onSelectPost = (post: Post, postIdx: number) => {
-    console.log('HERE IS STUFF', post, postIdx);
 
     setPostStateValue((prev) => ({
       ...prev,
@@ -55,14 +54,11 @@ const usePosts = (communityData?: Community) => {
     }
 
     const { voteStatus } = post;
-    // const existingVote = post.currentUserVoteStatus;
     const existingVote = postStateValue.postVotes.find(
-      (vote) => vote.postId === post.id
+      (votes) => votes.postId === post.id
     );
 
-    // is this an upvote or a downvote?
-    // has this user voted on this post already? was it up or down?
-
+   
     try {
       let voteChange = vote;
       const batch = writeBatch(firestore);
