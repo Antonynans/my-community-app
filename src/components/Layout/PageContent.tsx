@@ -3,6 +3,7 @@ import React from 'react';
 
 interface PageContentLayoutProps {
   maxWidth?: string;
+  children: any;
 }
 
 // Assumes array of two children are passed

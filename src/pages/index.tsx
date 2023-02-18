@@ -40,23 +40,14 @@ const Home: NextPage = () => {
   const communityStateValue = useRecoilValue(communityState);
 
   const getUserHomePosts = async () => {
-    console.log('GETTING USER FEED');
     setLoading(true);
     try {
-      /**
-       * if snippets has no length (i.e. user not in any communities yet)
-       * do query for 20 posts ordered by voteStatus
-       */
       const feedPosts: Post[] = [];
 
-      // User has joined communities
       if (communityStateValue.mySnippets.length) {
-        console.log('GETTING POSTS IN USER COMMUNITIES');
-
         const myCommunityIds = communityStateValue.mySnippets.map(
           (snippet) => snippet.communityId
         );
-        // Getting 2 posts from 3 communities that user has joined
         const postPromises: Array<Promise<QuerySnapshot<DocumentData>>> = [];
         [0, 1, 2].forEach((index) => {
           if (!myCommunityIds[index]) return;
@@ -72,10 +63,7 @@ const Home: NextPage = () => {
           );
         });
         const queryResults = await Promise.all(postPromises);
-        /**
-         * queryResults is an array of length 3, each with 0-2 posts from
-         * 3 communities that the user has joined
-         */
+
         queryResults.forEach((result) => {
           const posts = result.docs.map((doc) => ({
             id: doc.id,
@@ -83,9 +71,7 @@ const Home: NextPage = () => {
           })) as Post[];
           feedPosts.push(...posts);
         });
-      }
-      // User has not joined any communities yet
-      else {
+      } else {
         console.log('USER HAS NO COMMUNITIES - GETTING GENERAL POSTS');
 
         const postQuery = query(
@@ -107,9 +93,6 @@ const Home: NextPage = () => {
         ...prev,
         posts: feedPosts,
       }));
-
-      // if not in any, get 5 communities ordered by number of members
-      // for each one, get 2 posts ordered by voteStatus and set these to postState posts
     } catch (error: any) {
       console.log('getUserHomePosts error', error.message);
     }
@@ -164,11 +147,6 @@ const Home: NextPage = () => {
   };
 
   useEffect(() => {
-    /**
-     * initSnippetsFetched ensures that user snippets have been retrieved;
-     * the value is set to true when snippets are first retrieved inside
-     * of getSnippets in useCommunityData
-     */
     if (!communityStateValue.initSnippetsFetched) return;
 
     if (user) {
@@ -186,7 +164,6 @@ const Home: NextPage = () => {
     if (!user?.uid || !postStateValue.posts.length) return;
     getUserPostVotes();
 
-    // Clear postVotes on dismount
     return () => {
       setPostStateValue((prev) => ({
         ...prev,

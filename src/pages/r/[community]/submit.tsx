@@ -15,22 +15,16 @@ import useCommunityData from '@/hooks/useCommunityData';
 const CreateCommmunityPostPage: NextPage = () => {
   const [user, loadingUser, error] = useAuthState(auth);
   const router = useRouter();
-  const { community } = router.query;
-  // const visitedCommunities = useRecoilValue(communityState).visitedCommunities;
   const communityStateValue = useRecoilValue(communityState);
   const { loading } = useCommunityData();
 
-  /**
-   * Not sure why not working
-   * Attempting to redirect user if not authenticated
-   */
+
   useEffect(() => {
     if (!user && !loadingUser && communityStateValue.currentCommunity.id) {
       router.push(`/r/${communityStateValue.currentCommunity.id}`);
     }
   }, [user, loadingUser, communityStateValue.currentCommunity]);
 
-  console.log('HERE IS USER', user, loadingUser);
 
   return (
     <PageContentLayout maxWidth="1060px">

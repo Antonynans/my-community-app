@@ -1,11 +1,11 @@
-import { atom } from "recoil";
-import { FieldValue, Timestamp } from "firebase/firestore";
+import type { Timestamp } from 'firebase/firestore';
+import { atom } from 'recoil';
 
 export interface Community {
   id: string;
   creatorId: string;
   numberOfMembers: number;
-  privacyType: "public" | "restrictied" | "private";
+  privacyType: 'public' | 'restrictied' | 'private';
   createdAt?: Timestamp;
   imageURL?: string;
 }
@@ -32,10 +32,10 @@ interface CommunityState {
 }
 
 export const defaultCommunity: Community = {
-  id: "",
-  creatorId: "",
+  id: '',
+  creatorId: '',
   numberOfMembers: 0,
-  privacyType: "public",
+  privacyType: 'public',
 };
 
 export const defaultCommunityState: CommunityState = {
@@ -46,6 +46,6 @@ export const defaultCommunityState: CommunityState = {
 };
 
 export const communityState = atom<CommunityState>({
-  key: "communitiesState",
+  key: 'communitiesState',
   default: defaultCommunityState,
 });
