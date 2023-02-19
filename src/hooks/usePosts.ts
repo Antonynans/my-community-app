@@ -15,18 +15,17 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { authModalState } from '@/atoms/AuthModalAtom';
+import { communityState } from '@/atoms/communitiesAtom';
+import type { Post, PostVote } from '@/atoms/postsAtom';
+import { postState } from '@/atoms/postsAtom';
 import { auth, firestore, storage } from '@/Firebase/clientApp';
-
-import { communityState } from '../atoms/communitiesAtom';
-import type { Post, PostVote } from '../atoms/postsAtom';
-import { postState } from '../atoms/postsAtom';
 
 const usePosts = () => {
   const [user, loadingUser] = useAuthState(auth);
   const [postStateValue, setPostStateValue] = useRecoilState(postState);
   const setAuthModalState = useSetRecoilState(authModalState);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  // const [error, setError] = useState('');
   const router = useRouter();
   const communityStateValue = useRecoilValue(communityState);
 
@@ -93,14 +92,14 @@ const usePosts = () => {
           voteChange *= -1;
           updatedPost.voteStatus = voteStatus - vote;
           updatedPostVotes = updatedPostVotes.filter(
-            (vote) => vote.id !== existingVote.id
+            (votes) => votes.id !== existingVote.id
           );
           batch.delete(postVoteRef);
         } else {
           voteChange = 2 * vote;
           updatedPost.voteStatus = voteStatus + 2 * vote;
           const voteIdx = postStateValue.postVotes.findIndex(
-            (vote) => vote.id === existingVote.id
+            (votes) => votes.id === existingVote.id
           );
 
           if (voteIdx !== -1) {
@@ -184,9 +183,9 @@ const usePosts = () => {
       where('communityId', '==', communityId)
     );
     const postVoteDocs = await getDocs(postVotesQuery);
-    const postVotes = postVoteDocs.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
+    const postVotes = postVoteDocs.docs.map((docs) => ({
+      id: docs.id,
+      ...docs.data(),
     }));
     setPostStateValue((prev) => ({
       ...prev,
@@ -216,7 +215,7 @@ const usePosts = () => {
     loading,
     setLoading,
     onVote,
-    error,
+    // error,
   };
 };
 

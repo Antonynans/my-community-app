@@ -13,7 +13,7 @@ import { auth } from '@/Firebase/clientApp';
 import useCommunityData from '@/hooks/useCommunityData';
 
 const CreateCommmunityPostPage: NextPage = () => {
-  const [user, loadingUser, error] = useAuthState(auth);
+  const [user, loadingUser] = useAuthState(auth);
   const router = useRouter();
   const communityStateValue = useRecoilValue(communityState);
   const { loading } = useCommunityData();
