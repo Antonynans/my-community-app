@@ -1,5 +1,5 @@
-import { FormControl, FormErrorMessage, Input } from "@chakra-ui/react";
-import React from "react";
+import { Input } from '@chakra-ui/react';
+import React from 'react';
 
 type InputItemProps = {
   name: string;
@@ -31,19 +31,19 @@ const InputItem: React.FC<InputItemProps> = ({
       onChange={onChange}
       mb={mb}
       fontSize="10pt"
-      _placeholder={{ color: "gray.500" }}
+      _placeholder={{ color: 'gray.500' }}
       _hover={{
-        bg: "white",
-        border: "1px solid",
-        borderColor: "blue.500",
+        bg: 'white',
+        border: '1px solid',
+        borderColor: 'blue.500',
       }}
       _focus={{
-        outline: "none",
-        bg: "white",
-        border: "1px solid",
-        borderColor: "blue.500",
+        outline: 'none',
+        bg: 'white',
+        border: '1px solid',
+        borderColor: 'blue.500',
       }}
-      bg={bg || "gray.50"}
+      bg={bg || 'gray.50'}
       size={size}
       type={type}
       borderRadius={4}

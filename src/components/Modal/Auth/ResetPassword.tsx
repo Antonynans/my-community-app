@@ -2,10 +2,8 @@ import { Button, Flex, Icon, Input, Text } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth';
 import { BsDot, BsReddit } from 'react-icons/bs';
-import { useSetRecoilState } from 'recoil';
 
 import type { ModalView } from '@/atoms/AuthModalAtom';
-import { authModalState } from '@/atoms/AuthModalAtom';
 import { auth } from '@/Firebase/clientApp';
 
 type ResetPasswordProps = {
@@ -13,7 +11,6 @@ type ResetPasswordProps = {
 };
 
 const ResetPassword: React.FC<ResetPasswordProps> = ({ toggleView }) => {
-  const setAuthModalState = useSetRecoilState(authModalState);
   const [email, setEmail] = useState('');
   const [success, setSuccess] = useState(false);
   const [sendPasswordResetEmail, sending, error] =
@@ -85,27 +82,9 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ toggleView }) => {
         fontWeight={700}
         cursor="pointer"
       >
-        <Text
-          onClick={() =>
-            setAuthModalState((prev) => ({
-              ...prev,
-              view: 'login',
-            }))
-          }
-        >
-          LOGIN
-        </Text>
+        <Text onClick={() => toggleView('login')}>LOGIN</Text>
         <Icon as={BsDot} />
-        <Text
-          onClick={() =>
-            setAuthModalState((prev) => ({
-              ...prev,
-              view: 'signup',
-            }))
-          }
-        >
-          SIGN UP
-        </Text>
+        <Text onClick={() => toggleView('signup')}>SIGN UP</Text>
       </Flex>
     </Flex>
   );

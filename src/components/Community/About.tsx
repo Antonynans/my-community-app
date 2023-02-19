@@ -15,7 +15,6 @@ import { doc, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import moment from 'moment';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React, { useRef, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { FaReddit } from 'react-icons/fa';
@@ -41,17 +40,13 @@ const About: React.FC<AboutProps> = ({
   onCreatePage,
   loading,
 }) => {
-  const [user] = useAuthState(auth); // will revisit how 'auth' state is passed
-  const router = useRouter();
+  const [user] = useAuthState(auth);
   const selectFileRef = useRef<HTMLInputElement>(null);
   const setCommunityStateValue = useSetRecoilState(communityState);
 
-  // April 24 - moved this logic to custom hook in tutorial build (useSelectFile)
   const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile();
 
-  // Added last!
   const [imageLoading, setImageLoading] = useState(false);
-
 
   const updateImage = async () => {
     if (!selectedFile) return;
@@ -65,7 +60,6 @@ const About: React.FC<AboutProps> = ({
       });
       console.log('HERE IS DOWNLOAD URL', downloadURL);
 
-      // April 24 - added state update
       setCommunityStateValue((prev) => ({
         ...prev,
         currentCommunity: {
@@ -76,8 +70,6 @@ const About: React.FC<AboutProps> = ({
     } catch (error: any) {
       console.log('updateImage error', error.message);
     }
-    // April 24 - removed reload
-    // window.location.reload();
 
     setImageLoading(false);
   };
@@ -161,7 +153,6 @@ const About: React.FC<AboutProps> = ({
                   </Button>
                 </Link>
               )}
-              {/* !!!ADDED AT THE VERY END!!! INITIALLY DOES NOT EXIST */}
               {user?.uid === communityData?.creatorId && (
                 <>
                   <Divider />

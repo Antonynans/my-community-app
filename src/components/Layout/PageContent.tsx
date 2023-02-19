@@ -6,7 +6,6 @@ interface PageContentLayoutProps {
   children: any;
 }
 
-// Assumes array of two children are passed
 const PageContentLayout: React.FC<PageContentLayoutProps> = ({
   children,
   maxWidth,
@@ -21,7 +20,6 @@ const PageContentLayout: React.FC<PageContentLayoutProps> = ({
         >
           {children && children[0 as keyof typeof children]}
         </Flex>
-        {/* Right Content */}
         <Box
           display={{ base: 'none', md: 'flex' }}
           flexDirection="column"

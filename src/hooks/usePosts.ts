@@ -17,12 +17,11 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { authModalState } from '@/atoms/AuthModalAtom';
 import { auth, firestore, storage } from '@/Firebase/clientApp';
 
-import type { Community } from '../atoms/communitiesAtom';
 import { communityState } from '../atoms/communitiesAtom';
 import type { Post, PostVote } from '../atoms/postsAtom';
 import { postState } from '../atoms/postsAtom';
 
-const usePosts = (communityData?: Community) => {
+const usePosts = () => {
   const [user, loadingUser] = useAuthState(auth);
   const [postStateValue, setPostStateValue] = useRecoilState(postState);
   const setAuthModalState = useSetRecoilState(authModalState);
@@ -32,7 +31,6 @@ const usePosts = (communityData?: Community) => {
   const communityStateValue = useRecoilValue(communityState);
 
   const onSelectPost = (post: Post, postIdx: number) => {
-
     setPostStateValue((prev) => ({
       ...prev,
       selectedPost: { ...post, postIdx },
@@ -45,7 +43,6 @@ const usePosts = (communityData?: Community) => {
     post: Post,
     vote: number,
     communityId: string
-    // postIdx?: number
   ) => {
     event.stopPropagation();
     if (!user?.uid) {
@@ -58,7 +55,6 @@ const usePosts = (communityData?: Community) => {
       (votes) => votes.postId === post.id
     );
 
-   
     try {
       let voteChange = vote;
       const batch = writeBatch(firestore);
@@ -82,24 +78,17 @@ const usePosts = (communityData?: Community) => {
 
         console.log('NEW VOTE!!!', newVote);
 
-        // APRIL 25 - DON'T THINK WE NEED THIS
-        // newVote.id = postVoteRef.id;
-
         batch.set(postVoteRef, newVote);
 
         updatedPost.voteStatus = voteStatus + vote;
         updatedPostVotes = [...updatedPostVotes, newVote];
-      }
-      // Removing existing vote
-      else {
-        // Used for both possible cases of batch writes
+      } else {
         const postVoteRef = doc(
           firestore,
           'users',
           `${user.uid}/postVotes/${existingVote.id}`
         );
 
-        // Removing vote
         if (existingVote.voteValue === vote) {
           voteChange *= -1;
           updatedPost.voteStatus = voteStatus - vote;
@@ -107,17 +96,13 @@ const usePosts = (communityData?: Community) => {
             (vote) => vote.id !== existingVote.id
           );
           batch.delete(postVoteRef);
-        }
-        // Changing vote
-        else {
+        } else {
           voteChange = 2 * vote;
           updatedPost.voteStatus = voteStatus + 2 * vote;
           const voteIdx = postStateValue.postVotes.findIndex(
             (vote) => vote.id === existingVote.id
           );
-          // console.log("HERE IS VOTE INDEX", voteIdx);
 
-          // Vote was found - findIndex returns -1 if not found
           if (voteIdx !== -1) {
             updatedPostVotes[voteIdx] = {
               ...existingVote,
@@ -136,7 +121,6 @@ const usePosts = (communityData?: Community) => {
         (item) => item.id === post.id
       );
 
-      // if (postIdx !== undefined) {
       updatedPosts[postIdx!] = updatedPost;
       updatedState = {
         ...updatedState,
@@ -146,13 +130,7 @@ const usePosts = (communityData?: Community) => {
           [communityId]: updatedPosts,
         },
       };
-      // }
 
-      /**
-       * Optimistically update the UI
-       * Used for single page view [pid]
-       * since we don't have real-time listener there
-       */
       if (updatedState.selectedPost) {
         updatedState = {
           ...updatedState,
@@ -160,10 +138,8 @@ const usePosts = (communityData?: Community) => {
         };
       }
 
-      // Optimistically update the UI
       setPostStateValue(updatedState);
 
-      // Update database
       const postRef = doc(firestore, 'posts', post.id);
       batch.update(postRef, { voteStatus: voteStatus + voteChange });
       await batch.commit();
@@ -176,17 +152,14 @@ const usePosts = (communityData?: Community) => {
     console.log('DELETING POST: ', post.id);
 
     try {
-      // if post has an image url, delete it from storage
       if (post.imageURL) {
         const imageRef = ref(storage, `posts/${post.id}/image`);
         await deleteObject(imageRef);
       }
 
-      // delete post from posts collection
       const postDocRef = doc(firestore, 'posts', post.id);
       await deleteDoc(postDocRef);
 
-      // Update post state
       setPostStateValue((prev) => ({
         ...prev,
         posts: prev.posts.filter((item) => item.id !== post.id),
@@ -198,10 +171,6 @@ const usePosts = (communityData?: Community) => {
         },
       }));
 
-      /**
-       * Cloud Function will trigger on post delete
-       * to delete all comments with postId === post.id
-       */
       return true;
     } catch (error) {
       console.log('THERE WAS AN ERROR', error);
@@ -223,16 +192,6 @@ const usePosts = (communityData?: Community) => {
       ...prev,
       postVotes: postVotes as PostVote[],
     }));
-
-    // const unsubscribe = onSnapshot(postVotesQuery, (querySnapshot) => {
-    //   const postVotes = querySnapshot.docs.map((postVote) => ({
-    //     id: postVote.id,
-    //     ...postVote.data(),
-    //   }));
-
-    // });
-
-    // return () => unsubscribe();
   };
 
   useEffect(() => {
@@ -240,32 +199,7 @@ const usePosts = (communityData?: Community) => {
     getCommunityPostVotes(communityStateValue.currentCommunity.id);
   }, [user, communityStateValue.currentCommunity]);
 
-  /**
-   * DO THIS INITIALLY FOR POST VOTES
-   */
-  // useEffect(() => {
-  //   if (!user?.uid || !communityData) return;
-  //   const postVotesQuery = query(
-  //     collection(firestore, `users/${user?.uid}/postVotes`),
-  //     where("communityId", "==", communityData?.id)
-  //   );
-  //   const unsubscribe = onSnapshot(postVotesQuery, (querySnapshot) => {
-  //     const postVotes = querySnapshot.docs.map((postVote) => ({
-  //       id: postVote.id,
-  //       ...postVote.data(),
-  //     }));
-
-  //     setPostStateValue((prev) => ({
-  //       ...prev,
-  //       postVotes: postVotes as PostVote[],
-  //     }));
-  //   });
-
-  //   return () => unsubscribe();
-  // }, [user, communityData]);
-
   useEffect(() => {
-    // Logout or no authenticated user
     if (!user?.uid && !loadingUser) {
       setPostStateValue((prev) => ({
         ...prev,

@@ -4,6 +4,7 @@ import React from 'react';
 type ModalWrapperProps = {
   isOpen: boolean;
   onClose: () => void;
+  children: any;
 };
 
 const ModalWrapper: React.FC<ModalWrapperProps> = ({

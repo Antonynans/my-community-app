@@ -38,7 +38,6 @@ const Recommendations: React.FC<RecommendationsProps> = () => {
         id: doc.id,
         ...doc.data(),
       })) as Community[];
-      console.log('HERE ARE COMS', communities);
 
       setCommunities(communities);
     } catch (error: any) {

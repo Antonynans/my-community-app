@@ -28,7 +28,6 @@ const Login: React.FC<LoginProps> = ({ toggleView }) => {
       return setFormError('Please enter a valid email');
     }
 
-    // Valid form inputs
     signInWithEmailAndPassword(form.email, form.password);
   };
 

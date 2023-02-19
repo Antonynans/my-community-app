@@ -39,7 +39,6 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
   const [communityType, setCommunityType] = useState('public');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  // const setSnippetState = useSetRecoilState(communityState);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length > 21) return;
@@ -70,7 +69,6 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
 
     setLoading(true);
     try {
-      // Create community document and communitySnippet subcollection document on user
       const communityDocRef = doc(firestore, 'communities', name);
       await runTransaction(firestore, async (transaction) => {
         const communityDoc = await transaction.get(communityDocRef);
@@ -97,10 +95,7 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
       console.log('Transaction error', error);
       setNameError(error.message);
     }
-    // setSnippetState((prev) => ({
-    //   ...prev,
-    //   mySnippets: [],
-    // }));
+
     handleClose();
     router.push(`r/${name}`);
     setLoading(false);

@@ -15,7 +15,7 @@ const OAuthButtons: React.FC = () => {
         onClick={() => signInWithGoogle()}
         isLoading={loading}
       >
-        <Image src="/images/googlelogo.png" height="20px" mr={4} />
+        <Image src="/images/googlelogo.png" alt="" height="20px" mr={4} />
         Continue with Google
       </Button>
       <Button variant="oauth">Some Other Provider</Button>

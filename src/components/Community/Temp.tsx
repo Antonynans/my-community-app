@@ -1,13 +1,14 @@
-import { Flex, Icon, Input } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import React from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { BsLink45Deg } from "react-icons/bs";
-import { FaReddit } from "react-icons/fa";
-import { IoImageOutline } from "react-icons/io5";
-import { useSetRecoilState } from "recoil";
-import { authModalState } from "../../atoms/authModalAtom";
-import { auth } from "../../firebase/clientApp";
+import { Flex, Icon, Input } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { BsLink45Deg } from 'react-icons/bs';
+import { FaReddit } from 'react-icons/fa';
+import { IoImageOutline } from 'react-icons/io5';
+import { useSetRecoilState } from 'recoil';
+
+import { authModalState } from '@/atoms/AuthModalAtom';
+import { auth } from '@/Firebase/clientApp';
 
 const CreatePostLink: React.FC = () => {
   const router = useRouter();
@@ -16,7 +17,7 @@ const CreatePostLink: React.FC = () => {
 
   const onClick = () => {
     if (!user) {
-      setAuthModalState({ open: true, view: "login" });
+      setAuthModalState({ open: true, view: 'login' });
       return;
     }
     const { communityId } = router.query;
@@ -39,17 +40,17 @@ const CreatePostLink: React.FC = () => {
       <Input
         placeholder="Create Post"
         fontSize="10pt"
-        _placeholder={{ color: "gray.500" }}
+        _placeholder={{ color: 'gray.500' }}
         _hover={{
-          bg: "white",
-          border: "1px solid",
-          borderColor: "blue.500",
+          bg: 'white',
+          border: '1px solid',
+          borderColor: 'blue.500',
         }}
         _focus={{
-          outline: "none",
-          bg: "white",
-          border: "1px solid",
-          borderColor: "blue.500",
+          outline: 'none',
+          bg: 'white',
+          border: '1px solid',
+          borderColor: 'blue.500',
         }}
         bg="gray.50"
         borderColor="gray.200"

@@ -1,5 +1,5 @@
-import { FormControl, Input } from "@chakra-ui/react";
-import React from "react";
+import { Input } from '@chakra-ui/react';
+import React from 'react';
 
 type InputFieldProps = {
   name: string;
@@ -13,7 +13,6 @@ const InputField: React.FC<InputFieldProps> = ({
   name,
   placeholder,
   type,
-  isRequired, // not sure if will need this
   mb,
 }) => {
   return (
@@ -25,17 +24,17 @@ const InputField: React.FC<InputFieldProps> = ({
         type={type}
         mb={mb}
         fontSize="10pt"
-        _placeholder={{ color: "gray.500" }}
+        _placeholder={{ color: 'gray.500' }}
         _hover={{
-          bg: "white",
-          border: "1px solid",
-          borderColor: "blue.500",
+          bg: 'white',
+          border: '1px solid',
+          borderColor: 'blue.500',
         }}
         _focus={{
-          outline: "none",
-          bg: "white",
-          border: "1px solid",
-          borderColor: "blue.500",
+          outline: 'none',
+          bg: 'white',
+          border: '1px solid',
+          borderColor: 'blue.500',
         }}
       />
     </>

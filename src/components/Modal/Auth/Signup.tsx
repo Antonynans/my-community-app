@@ -32,7 +32,6 @@ const SignUp: React.FC<SignUpProps> = ({ toggleView }) => {
       return setFormError('Passwords do not match');
     }
 
-    // Valid form inputs
     createUserWithEmailAndPassword(form.email, form.password);
   };
 

@@ -14,7 +14,6 @@ import SearchInput from './SearchInput';
 const Navbar: React.FC = () => {
   const [user] = useAuthState(auth);
 
-  // Use <Link> for initial build; implement directory logic near end
   const { onSelectMenuItem } = useDirectory();
 
   return (

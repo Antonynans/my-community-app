@@ -27,9 +27,7 @@ const Communities: React.FC<CommunitiesProps> = () => {
         handleClose={() => setOpen(false)}
         userId={user?.uid!}
       />
-      {/* COULD DO THIS FOR CLEANER COMPONENTS */}
-      {/* <Moderating snippets={snippetState.filter((item) => item.isModerator)} />
-      <MyCommunities snippets={snippetState} setOpen={setOpen} /> */}
+
       {mySnippets.find((item) => item.isModerator) && (
         <Box mt={3} mb={4}>
           <Text pl={3} mb={1} fontSize="7pt" fontWeight={500} color="gray.500">

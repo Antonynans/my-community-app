@@ -67,7 +67,6 @@ const NewPostForm: React.FC<NewPostFormProps> = ({
     title: '',
     body: '',
   });
-  // const [selectedFile, setSelectedFile] = useState<string>();
   const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile();
   const selectFileRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
@@ -92,7 +91,6 @@ const NewPostForm: React.FC<NewPostFormProps> = ({
         editedAt: serverTimestamp(),
       });
 
-      // // check if selectedFile exists, if it does, do image processing
       if (selectedFile) {
         const imageRef = ref(storage, `posts/${postDocRef.id}/image`);
         await uploadString(imageRef, selectedFile, 'data_url');
@@ -102,7 +100,6 @@ const NewPostForm: React.FC<NewPostFormProps> = ({
         });
       }
 
-      // Clear the cache to cause a refetch of the posts
       setPostItems((prev) => ({
         ...prev,
         postUpdateRequired: true,

@@ -13,7 +13,7 @@ const SearchInput: React.FC<SearchInputProps> = () => {
       <input
         type="text"
         placeholder="Search Reddit"
-        className="h-8 w-full rounded-md border border-solid border-gray-200 bg-[#f7fafc] pl-8 text-xs hover:border-blue-500 hover:bg-[#ffffff] focus:border focus:border-blue-500 outline-none "
+        className="h-8 w-full rounded-md border border-solid border-gray-200 bg-[#f7fafc] pl-8 text-xs outline-none hover:border-blue-500 hover:bg-[#ffffff] focus:border focus:border-blue-500 "
       />
     </div>
   );

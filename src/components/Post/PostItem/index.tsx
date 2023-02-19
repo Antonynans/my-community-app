@@ -23,7 +23,7 @@ import {
   IoBookmarkOutline,
 } from 'react-icons/io5';
 
-import type { Post } from '../../../atoms/postsAtom';
+import type { Post } from '@/atoms/postsAtom';
 
 export type PostItemContentProps = {
   post: Post;
@@ -69,16 +69,11 @@ const PostItem: React.FC<PostItemContentProps> = ({
 
       console.log('Post successfully deleted');
 
-      // Could proably move this logic to onDeletePost function
       if (router) router.back();
     } catch (error: any) {
       console.log('Error deleting post', error.message);
-      /**
-       * Don't need to setLoading false if no error
-       * as item will be removed from DOM
-       */
+
       setLoadingDelete(false);
-      // setError
     }
   };
 
@@ -135,6 +130,7 @@ const PostItem: React.FC<PostItemContentProps> = ({
                       borderRadius="full"
                       boxSize="18px"
                       src={post.communityImageURL}
+                      alt=""
                       mr={2}
                     />
                   ) : (
@@ -166,8 +162,6 @@ const PostItem: React.FC<PostItemContentProps> = ({
                 <Skeleton height="200px" width="100%" borderRadius={4} />
               )}
               <Image
-                // width="80%"
-                // maxWidth="500px"
                 maxHeight="460px"
                 src={post.imageURL}
                 display={loadingImage ? 'none' : 'unset'}

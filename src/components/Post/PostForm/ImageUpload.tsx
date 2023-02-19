@@ -22,6 +22,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         <>
           <Image
             src={selectedFile as string}
+            alt=""
             maxWidth="400px"
             maxHeight="400px"
           />
