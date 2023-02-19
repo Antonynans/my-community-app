@@ -10,7 +10,7 @@ import { communityState, defaultCommunity } from '@/atoms/communitiesAtom';
 import { auth, firestore } from '@/Firebase/clientApp';
 import { getMySnippets } from '@/helpers/firestore';
 
-const useCommunityData = () => {
+const useCommunityData = (ssrCommunityData?: boolean) => {
   const [user] = useAuthState(auth);
   const router = useRouter();
   const [communityStateValue, setCommunityStateValue] =
