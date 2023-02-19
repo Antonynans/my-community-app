@@ -44,7 +44,7 @@ const About: React.FC<AboutProps> = ({
   const selectFileRef = useRef<HTMLInputElement>(null);
   const setCommunityStateValue = useSetRecoilState(communityState);
 
-  const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile();
+  const { selectedFile, onSelectFile } = useSelectFile();
 
   const [imageLoading, setImageLoading] = useState(false);
 
