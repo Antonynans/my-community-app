@@ -26,7 +26,7 @@ const AuthModal: React.FC<AuthModalProps> = () => {
       open: false,
     }));
 
-  const [user, error] = useAuthState(auth);
+  const [user] = useAuthState(auth);
 
   const toggleView = (view: string) => {
     setModalState({
