@@ -62,7 +62,7 @@ const NewPostForm: React.FC<NewPostFormProps> = ({
   communityImageURL,
   user,
 }) => {
-  const [selectedTab, setSelectedTab] = useState(formTabs[0].title);
+  const [selectedTab, setSelectedTab] = useState(formTabs[0]?.title);
   const [textInputs, setTextInputs] = useState({
     title: '',
     body: '',
