@@ -33,21 +33,6 @@ const Posts: React.FC<PostsProps> = ({ communityData, userId }) => {
     router.push(`/r/${communityData?.id!}/comments/${post.id}`);
   };
 
-  useEffect(() => {
-    if (
-      postStateValue.postsCache[communityData?.id!] &&
-      !postStateValue.postUpdateRequired
-    ) {
-      setPostStateValue((prev) => ({
-        ...prev,
-        posts: postStateValue.postsCache[communityData?.id!],
-      }));
-      return;
-    }
-
-    getPosts();
-  }, [communityData, postStateValue.postUpdateRequired]);
-
   const getPosts = async () => {
     setLoading(true);
     try {
@@ -72,6 +57,21 @@ const Posts: React.FC<PostsProps> = ({ communityData, userId }) => {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    if (
+      postStateValue.postsCache[communityData?.id!] &&
+      !postStateValue.postUpdateRequired
+    ) {
+      setPostStateValue((prev) => ({
+        ...prev,
+        posts: postStateValue.postsCache[communityData?.id!],
+      }));
+      return;
+    }
+
+    getPosts();
+  }, [communityData, postStateValue.postUpdateRequired]);
 
   return (
     <>
