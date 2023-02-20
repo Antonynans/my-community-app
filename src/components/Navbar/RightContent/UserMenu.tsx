@@ -53,7 +53,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ user }) => {
                 <Icon
                   fontSize={24}
                   mr={1}
-                  colors="gray-300"
+                  color="gray-300"
                   as={FaRedditSquare}
                 />
                 <Box
@@ -73,7 +73,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ user }) => {
                 </Box>
               </>
             ) : (
-              <Icon fontSize={24} mr={1} colors="gray-400" as={VscAccount} />
+              <Icon fontSize={24} mr={1} color="gray-400" as={VscAccount} />
             )}
           </Flex>
           <ChevronDownIcon />
