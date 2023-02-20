@@ -9,16 +9,13 @@ import {
   MenuList,
   Text,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React from 'react';
 
 import useDirectory from '@/hooks/useDirectory';
 
 import Communities from './Communities';
 
 const Directory: React.FC = () => {
-  const [open, setOpen] = useState(false);
-  const handleClose = () => setOpen(false);
-
   const { directoryState, toggleMenuOpen } = useDirectory();
 
   return (
