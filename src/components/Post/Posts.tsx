@@ -79,7 +79,7 @@ const Posts: React.FC<PostsProps> = ({ communityData, userId }) => {
         <PostLoader />
       ) : (
         <Stack>
-          {postStateValue.posts.map((post: Post, index) => (
+          {postStateValue.posts.map((post: Post) => (
             <PostItem
               key={post.id}
               post={post}
