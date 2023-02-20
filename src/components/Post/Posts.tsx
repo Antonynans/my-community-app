@@ -17,11 +17,7 @@ type PostsProps = {
   loadingUser: boolean;
 };
 
-const Posts: React.FC<PostsProps> = ({
-  communityData,
-  userId,
-  loadingUser,
-}) => {
+const Posts: React.FC<PostsProps> = ({ communityData, userId }) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
