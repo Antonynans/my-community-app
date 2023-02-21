@@ -58,7 +58,6 @@ const About: React.FC<AboutProps> = ({
       await updateDoc(doc(firestore, 'communities', communityData.id), {
         imageURL: downloadURL,
       });
-      console.log('HERE IS DOWNLOAD URL', downloadURL);
 
       setCommunityStateValue((prev) => ({
         ...prev,
@@ -68,7 +67,7 @@ const About: React.FC<AboutProps> = ({
         },
       }));
     } catch (error: any) {
-      console.log('updateImage error', error.message);
+      /* empty */
     }
 
     setImageLoading(false);

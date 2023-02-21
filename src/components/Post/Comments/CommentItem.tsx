@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 import { Box, Flex, Icon, Spinner, Stack, Text } from '@chakra-ui/react';
 import type { Timestamp } from 'firebase/firestore';
 import moment from 'moment';
@@ -33,23 +34,6 @@ const CommentItem: React.FC<CommentItemProps> = ({
   isLoading,
   userId,
 }) => {
-  // const [loading, setLoading] = useState(false);
-
-  // const handleDelete = useCallback(async () => {
-  //   setLoading(true);
-  //   try {
-  //     const success = await onDeleteComment(comment);
-
-  //     if (!success) {
-  //       throw new Error("Error deleting comment");
-  //     }
-  //   } catch (error: any) {
-  //     console.log(error.message);
-  //     // setError
-  //     setLoading(false);
-  //   }
-  // }, [setLoading]);
-
   return (
     <Flex>
       <Box mr={2}>

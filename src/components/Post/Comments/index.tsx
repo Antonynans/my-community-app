@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 import {
   Box,
   Flex,
@@ -113,15 +114,16 @@ const Comments: React.FC<CommentsProps> = ({
   };
 
   const onDeleteComment = useCallback(
-    async (comment: Comment) => {
-      setDeleteLoading(comment.id as string);
+    async (commentItem: Comment) => {
+      setDeleteLoading(commentItem.id as string);
       try {
-        if (!comment.id) throw 'Comment has no ID';
+        // eslint-disable-next-line @typescript-eslint/no-throw-literal
+        if (!commentItem.id) throw 'Comment has no ID';
         const batch = writeBatch(firestore);
-        const commentDocRef = doc(firestore, 'comments', comment.id);
+        const commentDocRef = doc(firestore, 'commentItem', commentItem.id);
         batch.delete(commentDocRef);
 
-        batch.update(doc(firestore, 'posts', comment.postId), {
+        batch.update(doc(firestore, 'posts', commentItem.postId), {
           numberOfComments: increment(-1),
         });
 
@@ -136,10 +138,11 @@ const Comments: React.FC<CommentsProps> = ({
           postUpdateRequired: true,
         }));
 
-        setComments((prev) => prev.filter((item) => item.id !== comment.id));
+        setComments((prev) =>
+          prev.filter((item) => item.id !== commentItem.id)
+        );
         // return true;
-      } catch (error: any) {
-        console.log('Error deleting comment', error.message);
+      } catch (error) {
         // return false;
       }
       setDeleteLoading('');
@@ -155,11 +158,11 @@ const Comments: React.FC<CommentsProps> = ({
         orderBy('createdAt', 'desc')
       );
       const commentDocs = await getDocs(commentsQuery);
-      const comments = commentDocs.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
+      const commentItem = commentDocs.docs.map((docs) => ({
+        id: docs.id,
+        ...docs.data(),
       }));
-      setComments(comments as Comment[]);
+      setComments(commentItem as Comment[]);
     } catch (error: any) {
       console.log('getPostComments error', error.message);
     }
