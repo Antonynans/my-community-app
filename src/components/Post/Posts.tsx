@@ -21,9 +21,8 @@ const Posts: React.FC<PostsProps> = ({ communityData, userId }) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const { postStateValue, setPostStateValue, onVote, onDeletePost } = usePosts(
-    communityData!
-  );
+  const { postStateValue, setPostStateValue, onVote, onDeletePost } =
+    usePosts();
 
   const onSelectPost = (post: Post, postIdx: number) => {
     setPostStateValue((prev) => ({
