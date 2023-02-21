@@ -7,9 +7,8 @@ import { auth } from '@/Firebase/clientApp';
 type OAuthButtonsProps = {};
 
 const OAuthButtons: React.FC<OAuthButtonsProps> = () => {
+  // eslint-disable-next-line unused-imports/no-unused-vars
   const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
-
-  console.log(user);
 
   return (
     <Flex direction="column" mb={4} width="100%">

@@ -82,7 +82,6 @@ const Posts: React.FC<PostsProps> = ({ communityData, userId }) => {
             <PostItem
               key={post.id}
               post={post}
-              // postIdx={index}
               onVote={onVote}
               onDeletePost={onDeletePost}
               userVoteValue={
