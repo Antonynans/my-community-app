@@ -34,7 +34,6 @@ const useDirectory = () => {
   };
 
   useEffect(() => {
-
     const existingCommunity = communityStateValue.currentCommunity;
 
     if (existingCommunity.id) {

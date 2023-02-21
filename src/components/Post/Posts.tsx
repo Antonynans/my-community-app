@@ -65,7 +65,7 @@ const Posts: React.FC<PostsProps> = ({ communityData, userId }) => {
     ) {
       setPostStateValue((prev) => ({
         ...prev,
-        posts: postStateValue.postsCache[communityData?.id!],
+        posts: postStateValue.postsCache[communityData?.id!] as Post[],
       }));
       return;
     }
