@@ -35,6 +35,7 @@ const CommunityPage: NextPage<CommunityPageProps> = ({ communityData }) => {
   if (!communityData) {
     return <CommunityNotFound />;
   }
+  console.log(communityStateValue);
 
   return (
     <>
