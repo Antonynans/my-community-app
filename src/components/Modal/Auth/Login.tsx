@@ -27,7 +27,6 @@ const Login: React.FC<LoginProps> = ({ toggleView }) => {
     if (!form.email.includes('@')) {
       return setFormError('Please enter a valid email');
     }
-
     signInWithEmailAndPassword(form.email, form.password);
   };
 

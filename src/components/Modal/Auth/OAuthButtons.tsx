@@ -7,7 +7,9 @@ import { auth } from '@/Firebase/clientApp';
 type OAuthButtonsProps = {};
 
 const OAuthButtons: React.FC<OAuthButtonsProps> = () => {
-  const [signInWithGoogle, _, loading, error] = useSignInWithGoogle(auth);
+  const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
+
+  console.log(user);
 
   return (
     <Flex direction="column" mb={4} width="100%">
@@ -20,7 +22,6 @@ const OAuthButtons: React.FC<OAuthButtonsProps> = () => {
         <Image src="/images/googlelogo.png" alt="" height="20px" mr={4} />
         Continue with Google
       </Button>
-      <Button variant="oauth">Some Other Provider</Button>
       {error && (
         <Text textAlign="center" fontSize="10pt" color="red" mt={2}>
           <>{error}</>

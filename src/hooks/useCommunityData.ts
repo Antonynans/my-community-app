@@ -17,7 +17,7 @@ const useCommunityData = () => {
     useRecoilState(communityState);
   const setAuthModalState = useSetRecoilState(authModalState);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState('');
 
   const getSnippets = async () => {
     setLoading(true);
@@ -29,9 +29,9 @@ const useCommunityData = () => {
         initSnippetsFetched: true,
       }));
       setLoading(false);
-    } catch (error: any) {
+    } catch (error) {
       console.log('Error getting user snippets', error);
-      setError(error.message);
+      setErrors(error as string);
     }
     setLoading(false);
   };
@@ -58,8 +58,8 @@ const useCommunityData = () => {
           ...communityDoc.data(),
         } as Community,
       }));
-    } catch (error: any) {
-      console.log('getCommunityData error', error.message);
+    } catch (error) {
+      console.log('getCommunityData error', error);
     }
     setLoading(false);
   };
@@ -157,7 +157,7 @@ const useCommunityData = () => {
     onJoinLeaveCommunity,
     loading,
     setLoading,
-    error,
+    errors,
   };
 };
 

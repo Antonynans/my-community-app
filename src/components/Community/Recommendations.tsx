@@ -34,12 +34,12 @@ const Recommendations: React.FC<RecommendationsProps> = () => {
         limit(5)
       );
       const communityDocs = await getDocs(communityQuery);
-      const communities = communityDocs.docs.map((doc) => ({
+      const community = communityDocs.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       })) as Community[];
 
-      setCommunities(communities);
+      setCommunities(community);
     } catch (error: any) {
       console.log('getCommunityRecommendations error', error.message);
     }
@@ -117,6 +117,7 @@ const Recommendations: React.FC<RecommendationsProps> = () => {
                             borderRadius="full"
                             boxSize="28px"
                             src={item.imageURL}
+                            alt=""
                             mr={2}
                           />
                         ) : (

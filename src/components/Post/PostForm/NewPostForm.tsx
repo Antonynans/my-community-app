@@ -70,7 +70,7 @@ const NewPostForm: React.FC<NewPostFormProps> = ({
   const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile();
   const selectFileRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [errors, setErrors] = useState(false);
   const router = useRouter();
   const setPostItems = useSetRecoilState(postState);
 
@@ -106,7 +106,7 @@ const NewPostForm: React.FC<NewPostFormProps> = ({
       }));
       router.back();
     } catch (error) {
-      setError(true);
+      setErrors(true);
     }
     setLoading(false);
   };
@@ -151,7 +151,7 @@ const NewPostForm: React.FC<NewPostFormProps> = ({
           />
         )}
       </Flex>
-      {error && (
+      {errors && (
         <Alert status="error">
           <AlertIcon />
           <Text mr={2}>Error creating post</Text>
