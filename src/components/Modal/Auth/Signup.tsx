@@ -18,7 +18,7 @@ const SignUp: React.FC<SignUpProps> = ({ toggleView }) => {
     confirmPassword: '',
   });
   const [formError, setFormError] = useState('');
-  const [createUserWithEmailAndPassword, _, loading, authError] =
+  const [createUserWithEmailAndPassword, user, loading, authError] =
     useCreateUserWithEmailAndPassword(auth);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -31,8 +31,7 @@ const SignUp: React.FC<SignUpProps> = ({ toggleView }) => {
     if (form.password !== form.confirmPassword) {
       return setFormError('Passwords do not match');
     }
-
-    createUserWithEmailAndPassword(form.email, form.password);
+    return createUserWithEmailAndPassword(form.email, form.password);
   };
 
   const onChange = ({
@@ -43,6 +42,8 @@ const SignUp: React.FC<SignUpProps> = ({ toggleView }) => {
       [name]: value,
     }));
   };
+
+  console.log(user);
 
   return (
     <form onSubmit={onSubmit}>

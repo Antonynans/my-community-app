@@ -37,7 +37,7 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
   userId,
 }) => {
   const setSnippetState = useSetRecoilState(communityState);
-  const [name, setName] = useState('');
+  const [names, setNames] = useState('');
   const [charsRemaining, setCharsRemaining] = useState(21);
   const [nameError, setNameError] = useState('');
   const [communityType, setCommunityType] = useState('public');
@@ -46,15 +46,15 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length > 21) return;
-    setName(event.target.value);
+    setNames(event.target.value);
     setCharsRemaining(21 - event.target.value.length);
   };
 
   const handleCreateCommunity = async () => {
     if (nameError) setNameError('');
-    const format = /[ `!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?~]/;
+    const format = /[ `!@#$%^&*()+\-=[\]{};':"\\|,.<>/?~]/;
 
-    if (format.test(name) || name.length < 3) {
+    if (format.test(names) || names.length < 3) {
       return setNameError(
         'Community names must be between 3–21 characters, and can only contain letters, numbers, or underscores.'
       );
@@ -62,12 +62,11 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
 
     setLoading(true);
     try {
-      // Create community document and communitySnippet subcollection document on user
-      const communityDocRef = doc(firestore, 'communities', name);
+      const communityDocRef = doc(firestore, 'communities', names);
       await runTransaction(firestore, async (transaction) => {
         const communityDoc = await transaction.get(communityDocRef);
         if (communityDoc.exists()) {
-          throw new Error(`Sorry, /r${name} is taken. Try another.`);
+          throw new Error(`Sorry, /r${names} is taken. Try another.`);
         }
 
         transaction.set(communityDocRef, {
@@ -78,9 +77,9 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
         });
 
         transaction.set(
-          doc(firestore, `users/${userId}/communitySnippets`, name),
+          doc(firestore, `users/${userId}/communitySnippets`, names),
           {
-            communityId: name,
+            communityId: names,
             isModerator: true,
           }
         );
@@ -94,8 +93,9 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
       mySnippets: [],
     }));
     handleClose();
-    router.push(`r/${name}`);
+    router.push(`r/${names}`);
     setLoading(false);
+    return null;
   };
 
   const onCommunityTypeChange = (
@@ -140,7 +140,7 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
           <Input
             position="relative"
             name="name"
-            value={name}
+            value={names}
             onChange={handleChange}
             pl="22px"
             type={''}

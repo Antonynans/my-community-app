@@ -18,7 +18,7 @@ const Login: React.FC<LoginProps> = ({ toggleView }) => {
   });
   const [formError, setFormError] = useState('');
 
-  const [signInWithEmailAndPassword, _, loading, authError] =
+  const [signInWithEmailAndPassword, user, loading, authError] =
     useSignInWithEmailAndPassword(auth);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -27,7 +27,7 @@ const Login: React.FC<LoginProps> = ({ toggleView }) => {
     if (!form.email.includes('@')) {
       return setFormError('Please enter a valid email');
     }
-    signInWithEmailAndPassword(form.email, form.password);
+    return signInWithEmailAndPassword(form.email, form.password);
   };
 
   const onChange = ({
@@ -38,6 +38,8 @@ const Login: React.FC<LoginProps> = ({ toggleView }) => {
       [name]: value,
     }));
   };
+
+  console.log(user);
 
   return (
     <form onSubmit={onSubmit}>
