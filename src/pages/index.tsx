@@ -40,11 +40,14 @@ const Home: NextPage = () => {
   const communityStateValue = useRecoilValue(communityState);
 
   const getUserHomePosts = async () => {
+    console.log('GETTING USER FEED');
     setLoading(true);
     try {
       const feedPosts: Post[] = [];
 
       if (communityStateValue.mySnippets.length) {
+        console.log('GETTING POSTS IN USER COMMUNITIES');
+
         const myCommunityIds = communityStateValue.mySnippets.map(
           (snippet) => snippet.communityId
         );
@@ -100,6 +103,7 @@ const Home: NextPage = () => {
   };
 
   const getNoUserHomePosts = async () => {
+    console.log('GETTING NO USER FEED');
     setLoading(true);
     try {
       const postQuery = query(
@@ -160,14 +164,16 @@ const Home: NextPage = () => {
   }, [user, loadingUser]);
 
   useEffect(() => {
-    if (user?.uid || postStateValue.posts.length) {
+    if (!user?.uid || !postStateValue.posts.length) return;
+    getUserPostVotes();
+
+    // eslint-disable-next-line consistent-return
+    return () => {
       setPostStateValue((prev) => ({
         ...prev,
         postVotes: [],
       }));
-      return;
-    }
-    getUserPostVotes();
+    };
   }, [postStateValue.posts, user?.uid]);
 
   return (
