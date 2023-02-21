@@ -15,13 +15,12 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { authModalState } from '@/atoms/AuthModalAtom';
-import type { Community } from '@/atoms/communitiesAtom';
 import { communityState } from '@/atoms/communitiesAtom';
 import type { Post, PostVote } from '@/atoms/postsAtom';
 import { postState } from '@/atoms/postsAtom';
 import { auth, firestore, storage } from '@/Firebase/clientApp';
 
-const usePosts = (communityData?: Community) => {
+const usePosts = () => {
   const [user, loadingUser] = useAuthState(auth);
   const [postStateValue, setPostStateValue] = useRecoilState(postState);
   const setAuthModalState = useSetRecoilState(authModalState);

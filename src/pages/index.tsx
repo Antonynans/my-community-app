@@ -100,7 +100,6 @@ const Home: NextPage = () => {
   };
 
   const getNoUserHomePosts = async () => {
-    console.log('GETTING NO USER FEED');
     setLoading(true);
     try {
       const postQuery = query(
@@ -161,15 +160,14 @@ const Home: NextPage = () => {
   }, [user, loadingUser]);
 
   useEffect(() => {
-    if (!user?.uid || !postStateValue.posts.length) return;
-    getUserPostVotes();
-
-    return () => {
+    if (user?.uid || postStateValue.posts.length) {
       setPostStateValue((prev) => ({
         ...prev,
         postVotes: [],
       }));
-    };
+      return;
+    }
+    getUserPostVotes();
   }, [postStateValue.posts, user?.uid]);
 
   return (

@@ -18,13 +18,11 @@ const CreateCommmunityPostPage: NextPage = () => {
   const communityStateValue = useRecoilValue(communityState);
   const { loading } = useCommunityData();
 
-
   useEffect(() => {
     if (!user && !loadingUser && communityStateValue.currentCommunity.id) {
       router.push(`/r/${communityStateValue.currentCommunity.id}`);
     }
   }, [user, loadingUser, communityStateValue.currentCommunity]);
-
 
   return (
     <PageContentLayout maxWidth="1060px">
