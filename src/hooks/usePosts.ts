@@ -76,8 +76,6 @@ const usePosts = (communityData?: Community) => {
           voteValue: vote,
         };
 
-        console.log('NEW VOTE!!!', newVote);
-
         batch.set(postVoteRef, newVote);
 
         updatedPost.voteStatus = voteStatus + vote;
@@ -166,8 +164,8 @@ const usePosts = (communityData?: Community) => {
         postsCache: {
           ...prev.postsCache,
           [post.communityId]: prev.postsCache[post.communityId]?.filter(
-            (item) => item.id !== post.id
-          ),
+            (item) => item?.id !== post?.id
+          ) as Post[],
         },
       }));
 

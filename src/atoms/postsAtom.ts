@@ -28,7 +28,7 @@ export type PostVote = {
   voteValue: number;
 };
 
-interface PostState {
+export interface PostState {
   selectedPost: Post | null;
   posts: Post[];
   postVotes: PostVote[];

@@ -5,7 +5,6 @@ const useSelectFile = () => {
   const [selectedFile, setSelectedFile] = useState<string>();
 
   const onSelectFile = (event: React.ChangeEvent<HTMLInputElement>) => {
-
     const reader = new FileReader();
 
     if (event.target.files?.[0]) {
