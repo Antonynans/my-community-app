@@ -1,4 +1,4 @@
-<h3 align="center">AudioStore</h3>
+<h3 align="center">My community app</h3>
 
   <p align="center">
    A fully responsive clone of the Reddit webapp, built with Next.js and Chakra-ui.
