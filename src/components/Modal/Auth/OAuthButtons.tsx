@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-vars */
 import { Button, Flex, Image, Text } from '@chakra-ui/react';
 import React from 'react';
 import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
@@ -7,7 +8,6 @@ import { auth } from '@/Firebase/clientApp';
 type OAuthButtonsProps = {};
 
 const OAuthButtons: React.FC<OAuthButtonsProps> = () => {
-  // eslint-disable-next-line unused-imports/no-unused-vars
   const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
 
   return (
