@@ -4,9 +4,7 @@ import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
 
 import { auth } from '@/Firebase/clientApp';
 
-type OAuthButtonsProps = {};
-
-const OAuthButtons: React.FC<OAuthButtonsProps> = () => {
+const OAuthButtons: React.FC = () => {
   const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
 
   // eslint-disable-next-line no-console
@@ -25,7 +23,7 @@ const OAuthButtons: React.FC<OAuthButtonsProps> = () => {
       </Button>
       {error && (
         <Text textAlign="center" fontSize="10pt" color="red" mt={2}>
-          <>{error}</>
+          {error?.message}
         </Text>
       )}
     </Flex>
